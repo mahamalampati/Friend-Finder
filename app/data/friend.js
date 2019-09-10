@@ -40,3 +40,13 @@ var friendsData = [
   
   
   module.exports = friendsData;
+
+
+  $(document).ready (function(){
+
+$("#submitbutton").on("click",function(){
+
+
+});
+
+  });
