@@ -5,8 +5,17 @@
     <!-- Tab Title -->
     <title>Friend Finder | Quiz</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+    integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 
 <body>
@@ -24,14 +33,13 @@
             <div class="panel-body">
                 <h4>Your Full Name</h4>
                 <div class="input-group">
-                    <input id="formName" class="form-control" type="text" name="name" placeholder="name">
+                    <input id="formName" class="form-control" type="text" name="" placeholder="name">
                     <span class="input-group-addon">(Required)</span>
                 </div>
                 <br>
                 <h4>Link to a Photo Image</h4>
                 <div class="input-group">
-                    <input id="formImage" class="form-control" type="text" name="name"
-                        placeholder="photo">
+                    <input id="formImage" class="form-control" type="text" name="" placeholder="photo">
                     <span class="input-group-addon">(Required)</span>
                 </div>
             </div>
@@ -161,8 +169,85 @@
             <h4> Submit</h4>
         </button>
 
-       
-        
+        <!-- Modal -->
+        <div class="modal fade" id="display-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Perfect Match!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h2 id="name">partners name</h2>
+                        <img id="photo" alt="your-match">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script type="text/javascript">
+
+            $("#submitButton").on("click", function () {
+                event.preventDefault();
+                console.log("Clicked!")
+
+                function validateForm() {
+                    var isValid = true;
+                    $(".form-control").each(function () {
+                        if ($(this).val() === "") {
+                            isValid = false;
+                        }
+                    });
+                    $(".chosen-select").each(function () {
+                        if ($(this).val() === "") {
+                            isValid = false;
+                        }
+                    });
+                    return isValid;
+                }
+
+                if (validateForm()) {
+
+                    var userData = {
+                        name: $("#name").val(),
+                        photo: $("#photo").val(),
+                        scores: [
+                            $("#Q1").val(),
+                            $("#Q2").val(),
+                            $("#Q3").val(),
+                            $("#Q4").val(),
+                            $("#Q5").val(),
+                            $("#Q6").val(),
+                            $("#Q7").val(),
+                            $("#Q8").val(),
+                            $("#Q9").val(),
+                            $("#Q10").val(),
+                        ]
+                    };
+
+                    var currentURL = window.location.origin;
+                    $.post(currentURL + "/api/friends", userData, function (data) {
+
+                        $("#name").text(userData.name);
+                        $("#photo").attr("src", userData.photo);
+                        $("#display-modal").modal("show");
+                    });
+                }
+                else {
+                    alert("Please fill out all fields before submitting!");
+                }
+                return false;
+            });
+        </script>
+
+
 </body>
 
 </html>
